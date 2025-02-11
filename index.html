@@ -36,6 +36,12 @@
             padding: 20px;
             border-radius: 10px;
             display: inline-block;
+            transition: color 0.5s, border 0.5s, text-shadow 0.5s;
+        }
+        .alert {
+            color: #f00 !important;
+            border-color: #f00 !important;
+            text-shadow: 0 0 15px #f00 !important;
         }
         #inputContainer {
             margin-top: 20px;
@@ -77,6 +83,7 @@
         <input type="number" id="seconds" placeholder="S" min="0" max="59">
         <button onclick="startTimer()">Start</button>
     </div>
+    <audio id="alarm" src="buzzer.mp3"></audio>
     <script>
         let countdown;
         function startTimer() {
@@ -93,10 +100,20 @@
                 let hrs = Math.floor(totalTime / 3600);
                 let mins = Math.floor((totalTime % 3600) / 60);
                 let secs = totalTime % 60;
-                document.getElementById("timer").innerText = 
+                let timerElement = document.getElementById("timer");
+                
+                timerElement.innerText = 
                     `${String(hrs).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+                
+                if (totalTime <= Math.floor((h * 3600 + m * 60 + s) * 0.1)) {
+                    timerElement.classList.add("alert");
+                }
+                
+                if (totalTime <= 0) {
+                    clearInterval(countdown);
+                    document.getElementById("alarm").play();
+                }
                 totalTime--;
-                if (totalTime < 0) clearInterval(countdown);
             }, 1000);
         }
     </script>
