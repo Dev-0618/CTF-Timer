@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTF Timer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+        
+        body {
+            background-color: #000;
+            color: #0ff;
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            font-size: 3em;
+            text-shadow: 0 0 10px #0ff, 0 0 20px #00f;
+            margin: 0;
+        }
+        h2 {
+            font-size: 2em;
+            text-shadow: 0 0 8px #0ff;
+            margin-bottom: 20px;
+        }
+        #timer {
+            font-size: 4em;
+            text-shadow: 0 0 15px #00f;
+            border: 3px solid #0ff;
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        #inputContainer {
+            margin-top: 20px;
+        }
+        input, button {
+            font-size: 1.2em;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+            outline: none;
+        }
+        input {
+            background: #111;
+            color: #0ff;
+            text-align: center;
+            width: 80px;
+            border: 2px solid #0ff;
+        }
+        button {
+            background: #0ff;
+            color: #000;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #00f;
+            color: #0ff;
+        }
+    </style>
+</head>
+<body>
+    <h1>C T F</h1>
+    <h2>Capture The Flag</h2>
+    <div id="timer">00:00:00</div>
+    <div id="inputContainer">
+        <input type="number" id="hours" placeholder="H" min="0" max="24">
+        <input type="number" id="minutes" placeholder="M" min="0" max="59">
+        <input type="number" id="seconds" placeholder="S" min="0" max="59">
+        <button onclick="startTimer()">Start</button>
+    </div>
+    <script>
+        let countdown;
+        function startTimer() {
+            clearInterval(countdown);
+            let h = parseInt(document.getElementById("hours").value) || 0;
+            let m = parseInt(document.getElementById("minutes").value) || 0;
+            let s = parseInt(document.getElementById("seconds").value) || 0;
+            
+            if (h > 24) h = 24; 
+            let totalTime = (h * 3600) + (m * 60) + s;
+            if (totalTime <= 0) return;
+            
+            countdown = setInterval(() => {
+                let hrs = Math.floor(totalTime / 3600);
+                let mins = Math.floor((totalTime % 3600) / 60);
+                let secs = totalTime % 60;
+                document.getElementById("timer").innerText = 
+                    `${String(hrs).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+                totalTime--;
+                if (totalTime < 0) clearInterval(countdown);
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
